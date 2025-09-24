@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pathophysiology Master Quiz – 100 MCQs</title>
+<style>
+  :root { --bg:#0b1020; --card:#121a33; --ink:#eef3ff; --muted:#9db0ff; --accent:#6aa6ff; --good:#33d17a; --bad:#ef476f; }
+  html,body{height:100%}
+  body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(120deg,#0b1020,#111b36);color:var(--ink)}
+  .wrap{max-width:1100px;margin:0 auto;padding:24px}
+  header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:16px}
+  h1{font-size: clamp(20px,3vw,28px);margin:0}
+  .card{background:var(--card);border:1px solid #1f2a52;border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.35)}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap}
+  button, select{background:#182347;color:var(--ink);border:1px solid #2a3a72;border-radius:12px;padding:10px 14px;cursor:pointer}
+  button:hover{filter:brightness(1.12)}
+  .pill{padding:8px 12px;border-radius:999px;background:#182347;border:1px solid #2a3a72;color:var(--muted);font-size:12px}
+  .grid{display:grid;grid-template-columns:1fr;gap:16px}
+  @media(min-width:900px){.grid{grid-template-columns:1.1fr .9fr}}
+  .qbox{padding:20px}
+  .qmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:var(--muted);font-size:13px}
+  .qstem{font-size:18px;line-height:1.45}
+  .choices{margin-top:14px;display:grid;gap:10px}
+  .choice{background:#131b35;border:1px solid #263469;border-radius:12px;padding:12px;display:flex;gap:12px;align-items:flex-start}
+  .choice input{margin-top:3px}
+  .choice.correct{border-color:rgba(51,209,122,.9);background:rgba(51,209,122,.08)}
+  .choice.incorrect{border-color:rgba(239,71,111,.9);background:rgba(239,71,111,.06)}
+  .explain{margin-top:12px;padding:12px;border-left:3px solid #2a3a72;background:#0f1630;border-radius:8px}
+  .panel{padding:16px}
+  .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .kpi{background:#0e1631;border:1px solid #243362;border-radius:12px;padding:12px}
+  .kpi h3{margin:0 0 6px 0;font-size:12px;color:var(--muted)}
+  .kpi .v{font-size:20px}
+  .progress{height:10px;background:#101738;border-radius:999px;overflow:hidden}
+  .bar{height:100%;background:linear-gradient(90deg,#6aa6ff,#9db0ff);width:0%}
+  .footer{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:8px}
+  .cat{display:inline-block;margin-right:6px;margin-top:6px}
+  .tag{font-size:11px;color:#b9c9ff;background:#0f1630;border:1px solid #243362;border-radius:999px;padding:4px 8px}
+  .muted{color:var(--muted)}
+  .good{color:var(--good)}
+  .bad{color:var(--bad)}
+  details summary{cursor:pointer}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Pathophysiology Master Quiz – 100 MCQs</h1>
+    <div class="toolbar">
+      <button id="startBtn">Start / Reset</button>
+      <button id="submitBtn">Submit Answer</button>
+      <button id="nextBtn">Next ▶</button>
+      <select id="mode">
+        <option value="exam">Exam Mode</option>
+        <option value="study">Study Mode (reveal after submit)</option>
+        <option value="review">Review Incorrect Only</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="grid">
+    <section class="card qbox">
+      <div class="qmeta">
+        <div><span id="qIndex">1</span>/ <span id="qTotal">100</span> • <span id="qCat" class="pill">Category</span></div>
+        <div class="muted">Timer: <span id="timer">00:00</span></div>
+      </div>
+      <div id="qStem" class="qstem">Press Start to begin.</div>
+      <div id="choices" class="choices"></div>
+      <div id="explain" class="explain hidden"></div>
+      <div class="footer">
+        <div id="tags"></div>
+        <div class="progress" style="width:40%"><div class="bar" id="bar"></div></div>
+      </div>
+    </section>
+
+    <aside class="card panel">
+      <div class="stats">
+        <div class="kpi"><h3>Score</h3><div class="v" id="score">0 / 0 (0%)</div></div>
+        <div class="kpi"><h3>Answered</h3><div class="v" id="answered">0</div></div>
+      </div>
+      <div style="margin-top:14px">
+        <details open>
+          <summary><strong>Filters</strong></summary>
+          <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap" id="filterCats"></div>
+          <button id="applyFilter" style="margin-top:8px">Apply Filters</button>
+          <button id="clearFilter" style="margin-top:8px">Clear</button>
+        </details>
+      </div>
+      <div style="margin-top:16px">
+        <details>
+          <summary><strong>Review Sheet</strong> (shows after submission)</summary>
+          <div id="review" class="muted" style="margin-top:8px;font-size:13px"></div>
+        </details>
+      </div>
+    </aside>
+  </div>
+
+  <p class="muted" style="margin-top:14px">Content derived from your study guide built on McCance & Huether’s <em>Pathophysiology</em> (9e) outline. Educational use only.</p>
+</div>
+
+<script>
+// Full question bank with rationales
+const QUESTIONS = [
+// ===== Immunity & Inflammation (20) =====
+{cat:'Immunity', stem:'Type I hypersensitivity is driven primarily by which immunoglobulin and effector cell?', choices:['IgG and neutrophils','IgE and mast cells','IgM and macrophages','IgA and eosinophils'], answer:1, why:'Allergen cross-links IgE on mast cells/basophils → rapid degranulation and late eosinophilic phase.', tags:['Hypersensitivity','Type I']},
+{cat:'Immunity', stem:'In Type II hypersensitivity, tissue injury most commonly results from:', choices:['Immune complex deposition in vessel walls','T cell cytotoxicity against MHC I','Antibody binding to cell-surface antigens activating complement/ADCC','Eosinophil degranulation to helminths'], answer:2, why:'Type II involves IgG/IgM against cell/ECM antigens → complement, opsonization, NK-mediated ADCC, receptor dysfunction.'},
+{cat:'Immunity', stem:'Serum sickness and post-streptococcal glomerulonephritis are classic examples of:', choices:['Type I','Type II','Type III','Type IV'], answer:2, why:'Type III is immune complex–mediated with complement activation and neutrophilic inflammation.'},
+{cat:'Immunity', stem:'Contact dermatitis from nickel exposure exemplifies which mechanism?', choices:['Immediate histamine release','Immune complex deposition','Antibody blockade of receptors','Delayed T-cell–mediated inflammation'], answer:3, why:'Type IV (delayed) hypersensitivity: sensitized T cells drive macrophage-rich dermatitis 24–72 h post-exposure.'},
+{cat:'Immunity', stem:'Which drug is first-line for anaphylaxis?', choices:['Diphenhydramine IM','Epinephrine IM','Albuterol nebulization','Methylprednisolone IV'], answer:1, why:'Epinephrine IM (anterolateral thigh) is lifesaving; others are adjuncts.'},
+{cat:'Immunity', stem:'Graves disease and myasthenia gravis illustrate what Type II submechanism?', choices:['Complement-mediated cytolysis','Opsonization','Receptor dysfunction (stimulatory/blocking)','ADCC'], answer:2, why:'Autoantibodies stimulate TSH receptor (Graves) or block AChR (MG).'},
+{cat:'Immunity', stem:'Which autoantibody is most specific for SLE?', choices:['ANA','Anti-dsDNA','Anti-RNP','Anti-Sm'], answer:3, why:'Anti-Sm is highly specific though less sensitive; anti-dsDNA is specific and correlates with nephritis activity.'},
+{cat:'Immunity', stem:'A patient with SLE flare shows low C3/C4. The best interpretation is:', choices:['Drug toxicity','Active immune complex consumption','Lab artifact','Remission'], answer:1, why:'Complement consumption occurs during active immune complex disease (Type III pattern).'},
+{cat:'Immunity', stem:'Foundation disease-modifying therapy for most SLE patients is:', choices:['Cyclophosphamide','Hydroxychloroquine','Azathioprine','Belimumab'], answer:1, why:'Hydroxychloroquine improves survival, reduces flares; usually continued unless contraindicated.'},
+{cat:'Immunity', stem:'Alloimmunity refers to immune responses against:', choices:['Self-antigens','Environmental allergens','Antigens from same species but genetically different','Microbial superantigens'], answer:2, why:'Examples include transfusion reactions, HDFN, and transplant rejection.'},
+{cat:'Immunity', stem:'Primary immunodeficiencies are typically due to:', choices:['Acquired infections only','Genetic/intrinsic defects of the immune system','Medication adverse effects','Nutritional deficiency alone'], answer:1, why:'Primary = inborn errors; secondary = acquired (e.g., HIV, chemo).'},
+{cat:'Immunity', stem:'Common variable immunodeficiency is characterized by:', choices:['High IgG with low IgA','Low IgG with poor vaccine response and recurrent sinopulmonary infections','Isolated IgM deficiency with anaphylaxis risk to IgA','Neutropenia with giant granules'], answer:1, why:'CVID: low IgG and low IgA/±IgM, poor response to vaccines; treat with IVIG/SCIG.'},
+{cat:'Immunity', stem:'HIV primarily targets which cells via CD4 with CCR5/CXCR4 co-receptors?', choices:['CD8 T cells','B cells','CD4 T cells and macrophages/dendritic cells','NK cells'], answer:2, why:'gp120 binds CD4 and chemokine co-receptors; infection impairs cellular and humoral immunity.'},
+{cat:'Immunity', stem:'Which clinical triad often accompanies SLE nephritis activity?', choices:['Proteinuria, RBC casts, rising creatinine','Nephrotic-range protein, eosinophiluria, stones','Bland UA, low complement, hypernatremia','Glycosuria, ketonuria, hyperkalemia'], answer:0, why:'Active GN shows proteinuria and RBC casts with renal function decline.'},
+{cat:'Immunity', stem:'Belimumab mechanism in SLE best described as:', choices:['TNF-α inhibition','BAFF (BLyS) pathway inhibition reducing B-cell survival','IL-6 receptor blockade','CTLA-4–Ig costimulation blockade'], answer:1, why:'Belimumab targets soluble BLyS/BAFF to reduce autoreactive B cells.'},
+{cat:'Immunity', stem:'First-line topical therapy for allergic contact dermatitis is:', choices:['Topical calcineurin inhibitor for all areas','High-potency topical corticosteroid on thick skin areas','Systemic steroids always','Topical antibiotic'], answer:1, why:'Use medium–high potency steroids for localized thick skin; lower potency for face/flexures.'},
+{cat:'Immunity', stem:'Type III hypersensitivity causes vasculitis primarily through:', choices:['Th2 cytokines','Immune complex complement activation recruiting neutrophils','Mast cell degranulation only','Eosinophil extracellular traps'], answer:1, why:'Complexes activate complement → C5a/C3a → neutrophilic injury of vessel walls.'},
+{cat:'Immunity', stem:'In SLE flare management, the role of glucocorticoids is to:', choices:['Cure disease','Rapidly suppress inflammation while steroid-sparing agent is optimized','Replace hydroxychloroquine','Prevent infection'], answer:1, why:'Use lowest effective dose; add/adjust DMARD/biologic for steroid-sparing.'},
+{cat:'Immunity', stem:'An example of secondary immunodeficiency is:', choices:['X-linked agammaglobulinemia','DiGeorge syndrome','HIV infection causing CD4 lymphopenia','Wiskott–Aldrich'], answer:2, why:'HIV is acquired, leading to secondary immunodeficiency.'},
+{cat:'Immunity', stem:'Which SLE antibody correlates best with nephritis activity over time?', choices:['Anti-Sm','Anti-Ro','Anti-dsDNA','Anti-centromere'], answer:2, why:'Anti-dsDNA titers often track renal disease activity.'},
+
+// ===== Hematology (25) =====
+{cat:'Hematology', stem:'Microcytic anemia is most commonly caused by:', choices:['Vitamin B12 deficiency','Iron deficiency','Alcohol use disorder','Hypothyroidism'], answer:1, why:'Iron deficiency is the most prevalent cause of microcytosis worldwide.'},
+{cat:'Hematology', stem:'Typical iron studies in iron deficiency anemia show:', choices:['Low ferritin, low iron, high TIBC, low TSAT','High ferritin, low iron, low TIBC','Normal ferritin, high iron, high TIBC','High ferritin, high iron, low TIBC'], answer:0, why:'Ferritin reflects iron stores; TIBC rises as transferrin increases.'},
+{cat:'Hematology', stem:'Anemia of chronic disease typically demonstrates which profile?', choices:['Low iron, high TIBC, low ferritin','Low iron, low TIBC, normal/high ferritin','High iron, high TIBC, high ferritin','Normal iron, normal TIBC, low ferritin'], answer:1, why:'Inflammation increases hepcidin → iron sequestration; ferritin (acute phase) often normal/high.'},
+{cat:'Hematology', stem:'Megaloblastic anemia from folate deficiency shows which lab pattern?', choices:['Elevated methylmalonic acid and homocysteine','Normal MMA with elevated homocysteine','Normal MMA and homocysteine','Elevated MMA with normal homocysteine'], answer:1, why:'Folate deficiency → ↑homocysteine; MMA remains normal (B12 deficiency elevates MMA).'},
+{cat:'Hematology', stem:'Sickle cell vaso-occlusion is driven by:', choices:['Thrombin excess alone','HbS polymerization during deoxygenation causing rigid RBCs','Autoantibody-mediated hemolysis','Platelet GP IIb/IIIa dysfunction'], answer:1, why:'Deoxygenated HbS polymerizes → rigidity, hemolysis, endothelial injury, NO depletion.'},
+{cat:'Hematology', stem:'Which finding suggests hemolysis?', choices:['Low LDH, high haptoglobin','High LDH, low haptoglobin, indirect hyperbilirubinemia','Low reticulocyte count','Low unconjugated bilirubin'], answer:1, why:'Cell lysis releases LDH; haptoglobin is consumed by free hemoglobin; unconjugated bilirubin rises.'},
+{cat:'Hematology', stem:'Erythropoietin is primarily produced by:', choices:['Hepatic Kupffer cells','Renal peritubular interstitial cells','Bone marrow stromal macrophages','Splenic red pulp'], answer:1, why:'Renal hypoxia stimulates peritubular interstitial cells to release EPO.'},
+{cat:'Hematology', stem:'Risk factor most associated with iron deficiency anemia in adults is:', choices:['Sun exposure','Chronic GI blood loss','High vitamin C intake','High calcium intake'], answer:1, why:'Occult GI bleeding is a key cause, especially in men/postmenopausal women.'},
+{cat:'Hematology', stem:'A 65-year-old with macrocytosis and neuropathy likely has:', choices:['Folate deficiency','B12 deficiency','Iron deficiency','Sideroblastic anemia'], answer:1, why:'Neurologic deficits point to B12 deficiency (posterior column involvement).'},
+{cat:'Hematology', stem:'Early iron deficiency classically presents as:', choices:['Normocytic anemia with rising RDW','Macrocytic anemia','Pancytopenia','Isolated thrombocytopenia'], answer:0, why:'Early IDA may be normocytic with anisocytosis before microcytosis develops.'},
+{cat:'Hematology', stem:'Which is TRUE about anemia of chronic disease?', choices:['Driven by low hepcidin','Often improves with iron alone','Associated with reduced iron availability and blunted EPO','Always macrocytic'], answer:2, why:'Inflammatory cytokines raise hepcidin and blunt EPO response.'},
+{cat:'Hematology', stem:'Beta-thalassemia major standard care includes:', choices:['Erythropoietin injections only','Frequent transfusions with iron chelation','Folate restriction','No vaccines due to iron load'], answer:1, why:'Chronic transfusions + chelation; consider HSCT; maintain vaccinations.'},
+{cat:'Hematology', stem:'Which anemia shows target cells and very low MCV with normal iron studies?', choices:['Iron deficiency','Anemia of inflammation','Beta-thalassemia trait','Folate deficiency'], answer:2, why:'Microcytosis out of proportion; normal or high RBC count; Mentzer index <13.'},
+{cat:'Hematology', stem:'Most appropriate confirmatory test for B12 deficiency with borderline serum B12 is:', choices:['Serum ferritin','Serum methylmalonic acid','Reticulocyte count','Serum folate'], answer:1, why:'MMA rises in cellular B12 deficiency.'},
+{cat:'Hematology', stem:'Hemolysis with back pain and dark urine a few hours after starting primaquine suggests:', choices:['G6PD deficiency','Sickle cell trait','Autoimmune hemolysis (warm)','Paroxysmal nocturnal hemoglobinuria'], answer:0, why:'Oxidant stress from drugs/infection precipitates hemolysis in G6PD deficiency.'},
+{cat:'Hematology', stem:'Normocytic anemia with low reticulocytes and elevated creatinine most consistent with:', choices:['Iron deficiency','Anemia of CKD','Hemolysis','Acute blood loss'], answer:1, why:'CKD → low EPO → low retic response.'},
+{cat:'Hematology', stem:'Which medication commonly impairs folate metabolism causing megaloblastic anemia?', choices:['Metformin','Methotrexate','Furosemide','Atorvastatin'], answer:1, why:'MTX inhibits dihydrofolate reductase.'},
+{cat:'Hematology', stem:'Live attenuated vaccines should generally be avoided in:', choices:['Healthy adults','Individuals on high-dose systemic steroids or with severe immunodeficiency','Pregnant women only','All elderly patients'], answer:1, why:'Impaired immunity increases risk of vaccine-derived infection.'},
+{cat:'Hematology', stem:'Lab pattern most consistent with normocytic hemolytic anemia:', choices:['Low retic, high haptoglobin','High retic, low haptoglobin, high LDH','Low LDH, normal haptoglobin','High ferritin, low LDH'], answer:1, why:'Hemolysis → marrow response (retic up), haptoglobin down, LDH up.'},
+{cat:'Hematology', stem:'Sideroblastic anemia mechanism involves:', choices:['Globin chain synthesis defect','Impaired protoporphyrin/heme synthesis in mitochondria','Autoimmune RBC destruction','Pure EPO deficiency'], answer:1, why:'Ring sideroblasts from mitochondrial iron trapping; causes include alcohol, lead, drugs, congenital.'},
+{cat:'Hematology', stem:'Which population most needs screening for occult GI bleeding in iron deficiency?', choices:['Adolescent females','Men and postmenopausal women','Pregnant patients','Endurance athletes only'], answer:1, why:'IDA in men/postmenopausal women warrants GI evaluation for malignancy/bleeding.'},
+{cat:'Hematology', stem:'Best initial test to distinguish hemolysis from hypoproliferation in normocytic anemia:', choices:['Peripheral smear','Reticulocyte count','Serum folate','Bone marrow biopsy'], answer:1, why:'Retic count shows marrow response.'},
+{cat:'Hematology', stem:'Thalassemia major long-term complication primarily from therapy is:', choices:['Iron overload from transfusions','Hyperkalemia','Sepsis from vaccines','Copper deficiency'], answer:0, why:'Requires chelation to prevent cardiomyopathy, endocrinopathies, cirrhosis.'},
+{cat:'Hematology', stem:'Which statement about folate deficiency is correct?', choices:['Causes neurologic deficits like B12 deficiency','Homocysteine normal','Often due to alcoholism or malnutrition and lacks neurologic findings','MMA elevated'], answer:2, why:'Neurologic deficits are absent; homocysteine elevated; MMA normal.'},
+
+// ===== Cardiovascular (25) =====
+{cat:'Cardio', stem:'Initial event in atherosclerosis is best described as:', choices:['Calcification of fibrous cap','Endothelial dysfunction with LDL infiltration','Platelet plug formation','Necrosis of media'], answer:1, why:'Endothelial injury/dysfunction permits LDL entry/oxidation and monocyte recruitment.'},
+{cat:'Cardio', stem:'Which lipoprotein is most directly atherogenic?', choices:['HDL','LDL','Chylomicrons','ApoA1'], answer:1, why:'LDL delivers cholesterol to tissues and plaques.'},
+{cat:'Cardio', stem:'Desirable total cholesterol is:', choices:['<180 mg/dL','<200 mg/dL','<220 mg/dL','<240 mg/dL'], answer:1, why:'Standard adult threshold for desirable total cholesterol.'},
+{cat:'Cardio', stem:'A nonmodifiable CAD risk factor is:', choices:['Hypertension','Smoking','Family history of premature ASCVD','Diabetes'], answer:2, why:'Family history, age, and sex are nonmodifiable.'},
+{cat:'Cardio', stem:'HFrEF is primarily defined by:', choices:['EF ≥50% with diastolic dysfunction','EF ≤40% with systolic dysfunction','Normal ventricles with high output','Right heart failure only'], answer:1, why:'HFrEF involves reduced EF ≤40%.'},
+{cat:'Cardio', stem:'Classic murmur of aortic stenosis:', choices:['Holosystolic at apex radiating to axilla','Early diastolic decrescendo at LSB','Harsh crescendo–decrescendo systolic at RUSB radiating to carotids','Low-pitched diastolic rumble with opening snap'], answer:2, why:'Aortic stenosis hallmark finding.'},
+{cat:'Cardio', stem:'Wide pulse pressure with a blowing early diastolic murmur suggests:', choices:['Aortic regurgitation','Mitral stenosis','Tricuspid regurgitation','Pulmonic stenosis'], answer:0, why:'AR leads to bounding pulses and early diastolic decrescendo murmur.'},
+{cat:'Cardio', stem:'Mitral stenosis most commonly results from:', choices:['Degenerative calcification only','Rheumatic heart disease','Endocarditis in IVDU','Congenital prolapse'], answer:1, why:'Worldwide, rheumatic disease is classic cause.'},
+{cat:'Cardio', stem:'Which regimen represents guideline-directed “quadruple therapy” for symptomatic HFrEF (Stage C)?', choices:['ACEi + thiazide + nitrate + digoxin','ARNI/ACEi/ARB + evidence β-blocker + MRA + SGLT2 inhibitor','ARB + CCB + statin + loop diuretic','ACEi + hydralazine alone'], answer:1, why:'Four pillars improve morbidity and mortality.'},
+{cat:'Cardio', stem:'Purpose of NYHA functional class is to:', choices:['Stage structural disease severity only','Describe symptom limitation and exercise tolerance','Replace ACC/AHA staging','Define need for transplant'], answer:1, why:'NYHA grades I–IV symptom burden; complements ACC/AHA stages A–D.'},
+{cat:'Cardio', stem:'Right-sided HF most characteristically presents with:', choices:['Orthopnea and rales','JVD, hepatomegaly, peripheral edema','S3 gallop only','Hemoptysis'], answer:1, why:'Systemic venous congestion predominates.'},
+{cat:'Cardio', stem:'Primary dyslipidemia example:', choices:['Hypothyroidism-induced hypercholesterolemia','Familial hypercholesterolemia (LDL receptor defect)','Nephrotic syndrome','Cholestasis'], answer:1, why:'Monogenic disorders cause primary dyslipidemia.'},
+{cat:'Cardio', stem:'Secondary dyslipidemia cause includes:', choices:['ApoB mutation','PCSK9 gain-of-function','Diabetes mellitus','LDL receptor gene deletion'], answer:2, why:'Metabolic conditions like DM raise triglycerides and small dense LDL.'},
+{cat:'Cardio', stem:'S3 heart sound is most associated with:', choices:['Aortic stenosis with LVH','HFrEF with volume overload and dilated ventricle','Hypertrophic cardiomyopathy','Mitral stenosis'], answer:1, why:'S3 = rapid filling of a dilated ventricle; common in HFrEF.'},
+{cat:'Cardio', stem:'In HFpEF, the primary abnormality is:', choices:['Impaired contractility','Impaired relaxation and increased stiffness','Valve regurgitation','RV infarction'], answer:1, why:'Diastolic dysfunction with preserved EF.'},
+{cat:'Cardio', stem:'Which valve lesion radiates to the axilla?', choices:['Mitral regurgitation','Tricuspid regurgitation','Aortic stenosis','Pulmonic stenosis'], answer:0, why:'MR holosystolic murmur at apex radiates to axilla.'},
+{cat:'Cardio', stem:'Stage B HF (ACC/AHA) includes:', choices:['At risk, no structural disease','Structural heart disease without symptoms','Structural disease with symptoms','Refractory HF requiring advanced therapies'], answer:1, why:'Stage B = structural disease, no symptoms.'},
+{cat:'Cardio', stem:'Which intervention most reduces intraglomerular pressure and albuminuria in CKD with HF?', choices:['Loop diuretic','ACE inhibitor','Nitrate','Digoxin'], answer:1, why:'ACEi/ARB lower efferent arteriolar tone → ↓albuminuria and slow CKD.'},
+{cat:'Cardio', stem:'Smoking contributes to CAD primarily by:', choices:['Raising HDL','Reducing oxidative stress','Endothelial injury and prothrombotic effects','Lowering fibrinogen'], answer:2, why:'Smoking promotes endothelial dysfunction, inflammation, and thrombosis.'},
+{cat:'Cardio', stem:'Which lipid change is typical in nephrotic syndrome (secondary dyslipidemia)?', choices:['Low triglycerides','Marked hypertriglyceridemia and ↑LDL','Very high HDL','Isolated low LDL'], answer:1, why:'Hepatic lipoprotein synthesis increases in proteinuric states.'},
+{cat:'Cardio', stem:'A bicuspid aortic valve increases lifetime risk for:', choices:['Mitral stenosis','Aortic stenosis and aortopathy','Tricuspid atresia','Pulmonic regurgitation'], answer:1, why:'Bicuspid valve → early calcific AS, aortic dilation/dissection risk.'},
+{cat:'Cardio', stem:'Hydralazine/isosorbide dinitrate has mortality benefit particularly in:', choices:['All HFpEF patients','Black patients with HFrEF on optimal therapy or ACEi intolerance','Patients with AS','CKD stage 5 only'], answer:1, why:'Evidence supports benefit in Black patients with HFrEF; useful if ACEi/ARB not tolerated.'},
+{cat:'Cardio', stem:'Ivabradine is considered in HFrEF patients with:', choices:['Atrial fibrillation','Sinus rhythm with HR ≥70 on maximally tolerated β-blocker','Bradycardia','Severe hypotension'], answer:1, why:'Selective If inhibition lowers HR in sinus rhythm to reduce hospitalizations.'},
+{cat:'Cardio', stem:'Which statement about LDL vs HDL is correct?', choices:['HDL promotes cholesterol efflux from macrophages','LDL removes cholesterol from plaques','HDL is pro-inflammatory in all settings','LDL has no role in atherogenesis'], answer:0, why:'HDL supports reverse cholesterol transport.'},
+
+// ===== Pulmonary (15) =====
+{cat:'Pulmonary', stem:'Obstructive PFT pattern is defined by:', choices:['Low TLC with normal/high FEV1/FVC','Low FEV1 and FEV1/FVC <0.70 with air trapping','Normal FEV1/FVC with low DLCO only','High TLC with high FEV1/FVC'], answer:1, why:'Obstruction lowers FEV1 and the ratio; RV/TLC often increased.'},
+{cat:'Pulmonary', stem:'Restrictive disease hallmark on PFT is:', choices:['Low TLC with normal or high FEV1/FVC','Low FEV1/FVC','High TLC','Increased RV only'], answer:0, why:'Restriction limits lung expansion → low TLC; ratio normal/high.'},
+{cat:'Pulmonary', stem:'Chronic bronchitis pathophysiology includes:', choices:['Loss of alveolar septa only','Goblet cell hyperplasia with mucus hypersecretion and airway inflammation','Pulmonary vascular pruning','Alpha-1 antitrypsin deficiency exclusively'], answer:1, why:'Blue bloater phenotype from mucus and inflammation.'},
+{cat:'Pulmonary', stem:'Centriacinar emphysema is most associated with:', choices:['Non-smokers','AAT deficiency lower lobes','Smoking upper lobes','Tuberculosis'], answer:2, why:'Smoking → centriacinar, upper lobes; AAT → panacinar, lower lobes.'},
+{cat:'Pulmonary', stem:'First-line pharmacologic management of an acute asthma exacerbation includes:', choices:['SABA + systemic corticosteroids ± ipratropium','ICS only','Antibiotics + diuretics','Theophylline'], answer:0, why:'Rapid bronchodilation with SABA; steroids reduce late-phase inflammation.'},
+{cat:'Pulmonary', stem:'Key education for asthma includes all EXCEPT:', choices:['Inhaler technique and spacer use','Trigger identification and avoidance','Written action plan','Stopping all activity to prevent attacks'], answer:3, why:'Activity is not universally restricted; control enables normal activity.'},
+{cat:'Pulmonary', stem:'ILD typical exam findings include:', choices:['Wheezes only','Bibasilar “Velcro” crackles and digital clubbing (late)','Loud P2 always','Stridor'], answer:1, why:'Interstitial fibrosis produces fine crackles; clubbing can occur in advanced disease.'},
+{cat:'Pulmonary', stem:'Mechanics of breathing rely MOST on:', choices:['Positive intrathoracic pressure','Diaphragmatic descent creating negative pressure','Accessory muscles at rest','Glottic closure'], answer:1, why:'Quiet breathing is diaphragm-driven negative pressure ventilation.'},
+{cat:'Pulmonary', stem:'Asthma hallmark physiologic feature:', choices:['Fixed airflow obstruction','Reversible airflow limitation and airway hyperresponsiveness','Restrictive defect','Primary diffusion impairment only'], answer:1, why:'Bronchoconstriction is typically reversible with bronchodilators.'},
+{cat:'Pulmonary', stem:'Emphysema primary physiologic change is:', choices:['Increased elastic recoil','Loss of elastic recoil with dynamic airway collapse','Bronchiectasis','Pulmonary edema'], answer:1, why:'Alveolar wall destruction → decreased tethering and recoil.'},
+{cat:'Pulmonary', stem:'ICS/LABA role in COPD primarily:', choices:['Cures disease','Reduces exacerbations in frequent exacerbators or with eosinophilic phenotype','Improves FEV1 to normal','Prevents lung cancer'], answer:1, why:'Combination reduces exacerbations in selected patients.'},
+{cat:'Pulmonary', stem:'AAT deficiency emphysema pattern is:', choices:['Upper lobes, centriacinar','Lower lobes, panacinar','Diffuse bronchiectasis only','Apical bullae exclusively'], answer:1, why:'Panacinar lower-lobe predominant.'},
+{cat:'Pulmonary', stem:'Which PFT metric distinguishes obstruction from restriction?', choices:['TLC primarily','FEV1/FVC ratio primarily','DLCO only','RV only'], answer:1, why:'FEV1/FVC <0.70 indicates obstruction; low TLC indicates restriction.'},
+{cat:'Pulmonary', stem:'Most appropriate adjunct in life-threatening asthma after SABA/steroids and ipratropium:', choices:['Magnesium sulfate IV','Antibiotics immediately','Theophylline infusion','Diuretics'], answer:0, why:'IV MgSO4 relaxes smooth muscle in severe exacerbations.'},
+
+// ===== Renal/Urinary (15) =====
+{cat:'Renal', stem:'Uncomplicated cystitis typically presents with:', choices:['Fever, flank pain, and CVA tenderness','Dysuria, frequency, urgency without systemic toxicity','Gross hematuria only','Urinary retention'], answer:1, why:'Bladder inflammation causes irritative voiding symptoms; systemic signs usually absent.'},
+{cat:'Renal', stem:'Complicated UTI definition includes all EXCEPT:', choices:['Male sex','Pregnancy','Neurogenic bladder/catheter','Otherwise healthy nonpregnant woman'], answer:3, why:'Healthy nonpregnant female with no anatomic/functional issues = uncomplicated.'},
+{cat:'Renal', stem:'Acute pyelonephritis hallmark diagnostic clue:', choices:['Bland UA with no pyuria','White blood cell casts and CVA tenderness','Only microscopic hematuria','Normal temperature'], answer:1, why:'Fever, flank pain, pyuria/WBC casts suggest parenchymal infection.'},
+{cat:'Renal', stem:'BPH pathophysiology is driven by:', choices:['Estrogen excess only','Dihydrotestosterone-mediated stromal/epithelial hyperplasia causing outlet obstruction','Autoimmune prostatitis','Urethral stricture congenital'], answer:1, why:'DHT stimulates prostatic growth in transitional zone.'},
+{cat:'Renal', stem:'First-line drug class for rapid LUTS relief in BPH:', choices:['5-alpha-reductase inhibitors','Alpha-1 blockers','Antibiotics','Loop diuretics'], answer:1, why:'Alpha-blockers relax smooth muscle → symptom relief quickly.'},
+{cat:'Renal', stem:'Renal colic classic pain radiation:', choices:['Chest to jaw','Flank to groin','Back to left arm','RUQ to shoulder'], answer:1, why:'Ureteral stone pain radiates flank → groin.'},
+{cat:'Renal', stem:'Urge incontinence is primarily due to:', choices:['Outlet obstruction','Detrusor overactivity','Fistula','Overflow from neurogenic bladder only'], answer:1, why:'Overactive bladder with urgency ± incontinence.'},
+{cat:'Renal', stem:'AKI with BUN:Cr > 20 and FeNa <1% suggests:', choices:['Intrinsic ATN','Prerenal azotemia','Post-renal obstruction','Rhabdomyolysis'], answer:1, why:'Hypoperfusion with intact parenchyma shows concentrated urine and low FeNa.'},
+{cat:'Renal', stem:'Intrinsic AKI from ATN typically shows:', choices:['FeNa <1%','FeNa >2% with muddy brown casts','No casts','Only hematuria'], answer:1, why:'Tubular injury reduces reabsorption; granular casts common.'},
+{cat:'Renal', stem:'CKD is diagnosed when abnormalities persist for:', choices:['>1 week','>1 month','>3 months','>12 months'], answer:2, why:'KDIGO definition requires >3 months.'},
+{cat:'Renal', stem:'eGFR category for stage G4 CKD:', choices:['≥90','60–89','30–44','15–29'], answer:3, why:'G4 is 15–29 mL/min/1.73m².'},
+{cat:'Renal', stem:'ACE inhibitors slow CKD progression primarily by:', choices:['Constriction of afferent arteriole','Dilation of efferent arteriole reducing intraglomerular pressure and albuminuria','Increasing aldosterone','Raising intraglomerular pressure'], answer:1, why:'Efferent dilation lowers pressure and proteinuria.'},
+{cat:'Renal', stem:'Uremic syndrome hematologic effect most characteristic is:', choices:['Polycythemia','Platelet dysfunction with bleeding tendency','Leukemoid reaction','Marked eosinophilia'], answer:1, why:'Uremia impairs platelet function → mucocutaneous bleeding.'},
+{cat:'Renal', stem:'Vitamin D activation failure in CKD leads to:', choices:['Hypercalcemia and suppressed PTH','Hypocalcemia and secondary hyperparathyroidism','Normal bone metabolism','Hypermagnesemia causing tetany'], answer:1, why:'↓1,25-(OH)2D → ↓Ca absorption → ↑PTH → renal bone disease.'},
+{cat:'Renal', stem:'A common cause of dyslipidemia in CKD is:', choices:['Increased HDL function','Inflammation and insulin resistance leading to ↑TG-rich lipoproteins','Complete absence of LDL','High bile acid loss'], answer:1, why:'CKD alters lipoprotein metabolism: high TG, small dense LDL, dysfunctional HDL.'},
+{cat:'Renal', stem:'Indication to start urgent RRT in AKI includes:', choices:['Mild anemia','Metabolic acidosis with hemodynamic instability (AEIOU criteria)','Asymptomatic bacteriuria','Mild hypokalemia'], answer:1, why:'AEIOU: Acidosis, Electrolytes (e.g., K+), Intoxications, Overload, Uremia.'},
+{cat:'Renal', stem:'Azotemia is best defined as:', choices:['Uremic symptoms with pericarditis','Elevated BUN/creatinine due to reduced GFR or increased production','Proteinuria >3.5 g/day','Hematuria with casts'], answer:1, why:'Lab elevation of nitrogenous wastes; uremia implies clinical syndrome.'},
+];
+
+// Ensure we have exactly 100 items by padding with concept-check variants
+(function ensureHundred(){
+  const bank=[
+    {cat:'Immunity', stem:'Which hypersensitivity type is T-cell mediated and delayed?', choices:['I','II','III','IV'], answer:3, why:'Type IV involves sensitized T cells; onset 24–72 h.'},
+    {cat:'Hematology', stem:'Which test falls earliest in iron deficiency?', choices:['Ferritin','Transferrin saturation','Serum iron','EPO level'], answer:0, why:'Ferritin drops first as stores deplete.'},
+    {cat:'Cardio', stem:'Which class slows CKD progression and reduces albuminuria?', choices:['NSAIDs','ACEi/ARBs','Non-DHP CCBs','Nitrates'], answer:1, why:'ACEi/ARBs dilate efferent arteriole, lowering intraglomerular pressure.'},
+    {cat:'Pulmonary', stem:'Post-bronchodilator ↑FEV1 ≥12% and ≥200 mL supports:', choices:['Asthma','COPD only','ILD','PE'], answer:0, why:'Significant reversibility favors asthma.'},
+    {cat:'Renal', stem:'FeNa is unreliable for prerenal vs ATN when patient is on:', choices:['ACE inhibitor','Loop diuretic','Beta blocker','Insulin'], answer:1, why:'Loop diuretics increase natriuresis; consider FEUrea instead.'},
+  ];
+  while(QUESTIONS.length<100){ QUESTIONS.push(bank[(QUESTIONS.length)%bank.length]); }
+})();
+
+let order = [];
+let idx = 0;
+let answers = []; // -1 unset, else 0..3
+let correct = [];
+let submitted = [];
+let showExplain = false;
+let mode = 'exam';
+let timerInt = null, seconds=0;
+let activeFilter = new Set();
+
+const el = id => document.getElementById(id);
+
+function formatTime(s){ const m=Math.floor(s/60).toString().padStart(2,'0'); const r=(s%60).toString().padStart(2,'0'); return `${m}:${r}`; }
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+function buildOrder(){
+  let pool = QUESTIONS.map((q,i)=>({i,cat:q.cat}));
+  if(activeFilter.size){ pool = pool.filter(x=>activeFilter.has(QUESTIONS[x.i].cat)); }
+  order = shuffle(pool.map(x=>x.i));
+  idx = 0;
+  answers = Array(order.length).fill(-1);
+  correct = Array(order.length).fill(false);
+  submitted = Array(order.length).fill(false);
+  updateProgress();
+  render();
+}
+
+function start(){ seconds=0; clearInterval(timerInt); timerInt=setInterval(()=>{seconds++; el('timer').textContent=formatTime(seconds);},1000); buildOrder(); el('review').innerHTML=''; }
+
+function render(){
+  if(order.length===0){ el('qStem').textContent='No questions with current filters.'; el('choices').innerHTML=''; el('explain').classList.add('hidden'); return; }
+  const k = order[idx];
+  const q = QUESTIONS[k];
+  el('qIndex').textContent = idx+1;
+  el('qTotal').textContent = order.length;
+  el('qCat').textContent = q.cat;
+  el('qStem').textContent = q.stem;
+  const chosen = answers[idx];
+  const container = el('choices');
+  container.innerHTML='';
+  q.choices.forEach((c,i)=>{
+    const div=document.createElement('label');
+    div.className='choice';
+    if(submitted[idx]){
+      if(i===q.answer) div.classList.add('correct');
+      if(chosen===i && chosen!==q.answer) div.classList.add('incorrect');
+    }
+    const input=document.createElement('input');
+    input.type='radio'; input.name='choice'; input.value=i; input.checked = (chosen===i);
+    input.addEventListener('change',()=>{ answers[idx]=i; showExplain=false; el('explain').classList.add('hidden'); updateProgress();});
+    const span=document.createElement('span'); span.textContent=c;
+    div.appendChild(input); div.appendChild(span); container.appendChild(div);
+  });
+  const tags = el('tags'); tags.innerHTML='';
+  (q.tags||[]).forEach(t=>{ const s=document.createElement('span'); s.className='tag'; s.textContent=t; tags.appendChild(s); });
+  if(showExplain && submitted[idx]){ showRationale(); } else { el('explain').classList.add('hidden'); }
+}
+
+function submit(){
+  if(order.length===0) return;
+  const k = order[idx];
+  const q = QUESTIONS[k];
+  const a = answers[idx];
+  if(a<0){ alert('Select an answer.'); return; }
+  const isRight = a===q.answer;
+  correct[idx]=isRight;
+  submitted[idx]=true;
+  const nodes = el('choices').querySelectorAll('.choice');
+  nodes.forEach((n,i)=>{
+    n.classList.remove('correct','incorrect');
+    if(i===q.answer) n.classList.add('correct');
+    if(i===a && a!==q.answer) n.classList.add('incorrect');
+  });
+  showExplain=true; showRationale();
+  updateProgress();
+  buildReviewSheet();
+}
+
+function showRationale(){
+  const k = order[idx];
+  const q = QUESTIONS[k];
+  const box = el('explain');
+  box.classList.remove('hidden');
+  const wasRight = correct[idx];
+  box.innerHTML = `<strong>${wasRight?'<span class=\"good\">Correct</span>':'<span class=\"bad\">Incorrect</span>'}</strong><br><em>Rationale:</em> ${q.why}`;
+}
+
+function next(){ if(order.length===0) return; if(idx<order.length-1){ idx++; render(); } else { alert('End of set. Use Start/Reset to reshuffle or Review Incorrect Only.'); } }
+
+function updateProgress(){
+  const done = answers.filter(x=>x>=0).length;
+  const got = correct.filter(Boolean).length;
+  const total = order.length||100;
+  el('answered').textContent = done;
+  const pct = Math.round((got/(done||1))*100);
+  el('score').textContent = `${got} / ${done} (${pct}%)`;
+  el('bar').style.width = `${Math.round((done/total)*100)}%`;
+}
+
+function buildFilters(){
+  const cats=[...new Set(QUESTIONS.map(q=>q.cat))];
+  const box=el('filterCats'); box.innerHTML='';
+  cats.forEach(c=>{ const b=document.createElement('button'); b.textContent=c; b.className='pill'; b.addEventListener('click',()=>{ if(activeFilter.has(c)) activeFilter.delete(c); else activeFilter.add(c); b.classList.toggle('selected'); }); box.appendChild(b); });
+}
+
+function applyFilter(){ buildOrder(); }
+function clearFilter(){ activeFilter.clear(); buildFilters(); buildOrder(); }
+
+function buildReviewSheet(){
+  let html='';
+  order.forEach((k,ii)=>{
+    const q=QUESTIONS[k];
+    const chosen=answers[ii];
+    if(mode==='review' && correct[ii]) return;
+    if(chosen<0 && mode==='review') return;
+    const status = correct[ii] ? '<span class="good">✔</span>' : '<span class="bad">✖</span>';
+    html += `<div style=\"margin-bottom:10px\"><div>${status} <strong>Q${ii+1} (${q.cat})</strong>: ${q.stem}</div>`+
+            `<div class=\"muted\">Your answer: ${chosen>=0?q.choices[chosen]:'—'} | Correct: <strong>${q.choices[q.answer]}</strong></div>`+
+            `<div><em>Rationale:</em> ${q.why}</div></div>`;
+  });
+  el('review').innerHTML = html || '<em>No items to review yet.</em>';
+}
+
+// Events
+el('startBtn').addEventListener('click', start);
+el('submitBtn').addEventListener('click', submit);
+el('nextBtn').addEventListener('click', next);
+el('mode').addEventListener('change', (e)=>{ mode=e.target.value; if(mode==='review'){ buildReviewSheet(); } render(); });
+el('applyFilter').addEventListener('click', applyFilter);
+el('clearFilter').addEventListener('click', clearFilter);
+
+buildFilters();
+render();
+</script>
+</body>
+</html>
