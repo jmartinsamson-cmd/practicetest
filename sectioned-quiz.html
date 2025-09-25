@@ -393,6 +393,30 @@ const BANK = {
   {cat:'Immunity', stem:'Natural killer (NK) cells destroy antibody-coated targets in which mechanism?', choices:[
     'Complement-mediated lysis','Phagocytosis','ADCC (antibody-dependent cellular cytotoxicity)','Neutralization'
   ], answer:2, why:'Fc receptor on NK binds IgG on target → cytotoxic granule release (a type II submechanism).'},
+     {cat:'Immunity', stem:'Best **initial** therapy for severe Type I hypersensitivity (anaphylaxis):', choices:[
+    'IM epinephrine','IV antihistamines','Nebulized albuterol only','Oral steroids'
+  ], answer:0, why:'IM epinephrine is first-line and lifesaving; others are adjuncts.'},
+
+  {cat:'Immunity', stem:'General treatment principle for **Type II** antibody-mediated disease:', choices:[
+    'Allergen immunotherapy',
+    'Remove offending antigen and use immunosuppression; consider plasmapheresis/IVIG when severe',
+    'Desensitization with oral antigen',
+    'Antibiotics only'
+  ], answer:1, why:'Reduce antibody production/effects and remove the trigger when possible.'},
+
+  {cat:'Immunity', stem:'Typical management approach for **Type III** immune-complex vasculitis:', choices:[
+    'High-dose antihistamines only',
+    'Treat inciting cause (drug/infection) and use anti-inflammatories ± steroids',
+    'Epinephrine autoinjector as sole therapy',
+    'No therapy needed'
+  ], answer:1, why:'Remove trigger and suppress inflammation; consider immunosuppression for severe disease.'},
+
+  {cat:'Immunity', stem:'Treatment focus for **Type IV** contact dermatitis:', choices:[
+    'Antibiotics',
+    'Topical corticosteroids (systemic if severe) and trigger avoidance',
+    'Daily epinephrine',
+    'Complement inhibitors'
+  ], answer:1, why:'T-cell mediated dermatitis improves with steroids and avoidance.'},
 ],
  
   'Hematology': [
@@ -493,7 +517,54 @@ const BANK = {
   'Tricuspid atresia and coarctation',
   'Mitral annular calcification alone'
 ], answer:1, why:'AR commonly arises from leaflet disease (bicuspid, endocarditis) or root dilation (HTN, connective-tissue disease).'},
+ {cat:'Cardio', stem:'Adult total cholesterol classification is best summarized as:', choices:[
+    'Normal <180; Borderline 180–219; High ≥220 mg/dL',
+    'Desirable <200; Borderline high 200–239; High ≥240 mg/dL',
+    'Desirable <220; Borderline high 220–259; High ≥260 mg/dL',
+    'Desirable <190; Borderline high 190–229; High ≥230 mg/dL'
+  ], answer:1, why:'Standard adult cut points: desirable <200 mg/dL; borderline high 200–239; high ≥240.'},
 
+  {cat:'Cardio', stem:'Which is a **primary (genetic)** cause of dyslipidemia?', choices:[
+    'Hypothyroidism',
+    'Nephrotic syndrome',
+    'Familial hypercholesterolemia (LDLR/ApoB/PCSK9 defects)',
+    'Excess alcohol intake'
+  ], answer:2, why:'Primary = inherited disorders such as familial hypercholesterolemia; others are secondary/acquired.'},
+
+  {cat:'Cardio', stem:'Which is a **secondary (acquired)** cause of dyslipidemia?', choices:[
+    'ApoB mutation',
+    'PCSK9 gain-of-function',
+    'Diabetes/insulin resistance',
+    'LDLR truncation'
+  ], answer:2, why:'Insulin resistance, hypothyroidism, CKD/nephrotic syndrome, cholestasis, alcohol, and certain meds are common secondary causes.'},
+
+  {cat:'Cardio', stem:'Pathophysiology of **aortic stenosis** is best described as:', choices:[
+    'Volume overload → eccentric LV hypertrophy',
+    'Pressure overload from a fixed outflow obstruction → concentric LV hypertrophy',
+    'Diastolic regurgitant flow → wide pulse pressure',
+    'LA pressure elevation from inflow obstruction → pulmonary edema'
+  ], answer:1, why:'AS creates pressure overload and concentric LVH; symptoms include angina, syncope, dyspnea.'},
+
+  {cat:'Cardio', stem:'**Aortic regurgitation** primarily causes which ventricular change?', choices:[
+    'Concentric LV hypertrophy due to pressure load',
+    'Eccentric LV hypertrophy due to volume overload',
+    'RV dilation only',
+    'No structural change'
+  ], answer:1, why:'Diastolic backflow produces chronic LV volume overload → eccentric LV remodeling and wide pulse pressure.'},
+
+  {cat:'Cardio', stem:'**Mitral stenosis** hemodynamics are dominated by:', choices:[
+    'Increased LA pressure with pulmonary congestion and AF risk',
+    'Reduced LV preload with bounding pulses',
+    'Fixed RV outflow obstruction',
+    'Acute papillary muscle rupture'
+  ], answer:0, why:'Rheumatic MS → elevated LA pressure → dyspnea, hemoptysis, AF; diastolic rumble with opening snap.'},
+
+  {cat:'Cardio', stem:'**Mitral regurgitation** pathophysiology leads to:', choices:[
+    'Solely pressure overload of LV',
+    'Systolic backflow → LA/LV volume overload and eventual pulmonary HTN',
+    'Immediate cardiogenic shock in all patients',
+    'No effect on LA size'
+  ], answer:1, why:'Chronic MR causes volume overload of LA/LV, LA dilation, and later pulmonary hypertension.'},
   ],
   'Pulmonary': [
     {cat:'Pulmonary', stem:'Obstructive PFT pattern:', choices:['Low TLC with normal/high FEV1/FVC','Low FEV1 and FEV1/FVC <0.70 with air trapping','Normal FEV1/FVC with low DLCO only','High TLC with high FEV1/FVC'], answer:1, why:'Ratio falls; RV/TLC often ↑.'},
@@ -561,6 +632,65 @@ const BANK = {
     {cat:'Renal', stem:'CKD-associated dyslipidemia typically features:', choices:['Increased HDL only','Hypertriglyceridemia, ↑apoB lipoproteins, impaired clearance of TG-rich particles','Very low LDL','No lipid abnormalities'], answer:1, why:'CKD → ↑TG, VLDL, remnants; HDL often dysfunctional.'},
     {cat:'Renal', stem:'Risk factors for urge incontinence (overactive bladder) include:', choices:['Young age and dehydration','Stroke, Parkinson disease, multiple sclerosis, aging, bladder irritants (caffeine, alcohol)','BPH only','Recent hysterectomy always'], answer:1, why:'Neurologic disease/aging and irritants increase detrusor overactivity.'},
     {cat:'Renal', stem:'Renal calcium oxalate stone pathogenesis most closely involves:', choices:['Urease-producing bacteria forming struvite','Supersaturation of urine with calcium and oxalate leading to crystal nucleation and growth in low urine volume','Cystinuria causing hexagonal crystals','Uric acid precipitation at high urine pH'], answer:1, why:'Low volume/high solute → supersaturation and crystallization; most common stone type.'}
+     {cat:'Renal', stem:'Chronic kidney disease (CKD) is diagnosed when kidney abnormalities persist for **how long**?', choices:[
+    '>1 week','>1 month','≥3 months','≥12 months'
+  ], answer:2, why:'KDIGO definition: structural or functional abnormality for ≥3 months with health implications.'},
+
+  {cat:'Renal', stem:'Which **meets CKD criteria** even if eGFR ≥60 mL/min/1.73 m²?', choices:[
+    'Albumin-to-creatinine ratio (ACR) 10 mg/g for 2 weeks',
+    'ACR ≥30 mg/g for ≥3 months',
+    'Single eGFR 55 mL/min/1.73 m²',
+    'Microscopic hematuria once'
+  ], answer:1, why:'Markers of kidney damage (e.g., persistent ACR ≥30 mg/g) for ≥3 months qualify as CKD regardless of eGFR.'},
+
+  {cat:'Renal', stem:'**Uremic syndrome** commonly presents with which constellation?', choices:[
+    'Polycythemia, tremor, jaundice',
+    'Pericarditis, encephalopathy/asterixis, platelet dysfunction with bleeding, nausea',
+    'Hypotension, asthma, pancreatitis',
+    'Hyperthyroidism, vision loss'
+  ], answer:1, why:'Multisystem involvement: neuro, CV (uremic pericarditis), hematologic (platelet dysfunction), GI, derm, endocrine/metabolic.'},
+
+  {cat:'Renal', stem:'What best explains **CKD-associated dyslipidemia**?', choices:[
+    'Increased HDL-mediated reverse transport',
+    'Reduced lipoprotein lipase activity and insulin resistance → ↑TG-rich lipoproteins and small dense LDL',
+    'Absent LDL entirely',
+    'Markedly elevated HDL only'
+  ], answer:1, why:'CKD impairs TG clearance (↓LPL/HTGL), alters apolipoproteins, and increases TG-rich remnants; HDL often low/dysfunctional.'},
+
+  {cat:'Renal', stem:'**ACE inhibitors** slow CKD progression primarily by:', choices:[
+    'Constriction of afferent arteriole to lower GFR',
+    'Efferent arteriolar dilation reducing intraglomerular pressure and proteinuria',
+    'Increasing aldosterone',
+    'Raising intraglomerular pressure to “normalize” filtration'
+  ], answer:1, why:'Efferent dilation lowers glomerular capillary pressure and albumin leak, slowing progression—especially in albuminuric CKD.'},
+
+  {cat:'Renal', stem:'Which **endocrine** complication is characteristic of CKD?', choices:[
+    'Primary hyperparathyroidism with hypercalcemia',
+    'Secondary hyperparathyroidism due to low 1,25-(OH)₂D and hypocalcemia',
+    'Cushing syndrome',
+    'Graves disease'
+  ], answer:1, why:'CKD-MBD: reduced vitamin D activation → hypocalcemia → secondary HPT; bone disease (renal osteodystrophy).'},
+  
+  {cat:'Renal', stem:'Which **cardiovascular** complication is most linked to CKD morbidity/mortality?', choices:[
+    'Tricuspid atresia',
+    'Accelerated atherosclerosis, LV hypertrophy, vascular calcification, and heart failure',
+    'Isolated pericardial cysts',
+    'Atrial septal defect'
+  ], answer:1, why:'HTN/LVH, arterial stiffness/calcification, ASCVD, and HF drive excess CV risk in CKD.'},
+
+  {cat:'Renal', stem:'**Albuminuria categories** relevant to CKD staging:', choices:[
+    'A1 ≥300 mg/g; A2 30–300 mg/g; A3 <30 mg/g',
+    'A1 <30 mg/g; A2 30–300 mg/g; A3 >300 mg/g',
+    'A1 30–300 mg/g; A2 >300 mg/g; A3 any',
+    'Albuminuria is not used in CKD'
+  ], answer:1, why:'A1 <30; A2 30–300; A3 >300 mg/g (ACR); combine with G stage for prognosis.'},
+
+  {cat:'Renal', stem:'**Indications for urgent dialysis (AEIOU)** include all EXCEPT:', choices:[
+    'Severe metabolic acidosis',
+    'Life-threatening hyperkalemia',
+    'Toxic alcohol ingestion',
+    'Mild asymptomatic anemia'
+  ], answer:3, why:'AEIOU: Acidosis, Electrolytes, Intoxications, Overload, Uremia—not mild anemia.'},
   ]
 };
 
