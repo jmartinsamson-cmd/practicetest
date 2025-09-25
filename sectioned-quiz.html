@@ -68,16 +68,19 @@
 <div class="wrap">
   <header>
     <h1>Pathophysiology Quiz — Sectioned Version</h1>
-    <div class="toolbar">
-      <button id="startBtn">Start / Reset</button>
-      <button id="submitBtn">Submit Answer</button>
-      <button id="nextBtn">Next ▶</button>
-      <select id="mode">
-        <option value="exam">Exam Mode</option>
-        <option value="study">Study Mode (reveal after submit)</option>
-        <option value="review">Review Incorrect Only</option>
-      </select>
-    </div>
+<div class="toolbar">
+  <button id="startBtn">Start / Reset</button>
+  <button id="shuffleBtn" title="Reshuffle the current pool and restart timer">Shuffle 🔀</button>
+  <button id="prevBtn">◀ Back</button>
+  <button id="submitBtn">Submit Answer</button>
+  <button id="nextBtn">Next ▶</button>
+  <select id="mode">
+    <option value="exam">Exam Mode</option>
+    <option value="study">Study Mode (reveal after submit)</option>
+    <option value="review">Review Incorrect Only</option>
+  </select>
+</div>
+
   </header>
 
   <div class="card" style="padding:14px">
@@ -478,6 +481,35 @@ function submit(){
 }
 
 function next(){ if(order.length===0) return; if(idx<order.length-1){ idx++; render(); } else { alert('End of set. Press Start to reshuffle or change sections.'); } }
+function prev(){
+  if(order.length===0) return;
+  if(idx > 0){
+    idx--;
+    render();
+  } else {
+    alert('This is the first question.');
+  }
+}
+
+function shuffleAll(){
+  if(selected.size === 0){ alert('Select at least one section.'); return; }
+  // If we haven't started yet, just start (builds pool + shuffles)
+  if(!order || order.length === 0){ start(); return; }
+  // Reshuffle the current pool and reset progress/timer
+  shuffle(order);
+  idx = 0;
+  answers  = Array(order.length).fill(-1);
+  correct  = Array(order.length).fill(false);
+  submitted= Array(order.length).fill(false);
+  showExplain = false;
+  document.getElementById('explain').style.display = 'none';
+  el('review').innerHTML = '';
+  seconds = 0;
+  clearInterval(timerInt);
+  timerInt = setInterval(()=>{ seconds++; el('timer').textContent = formatTime(seconds); }, 1000);
+  render();
+  updateProgress();
+}
 
 function updateProgress(){
   const done = answers.filter(x=>x>=0).length; const got = correct.filter(Boolean).length; const total = order.length||1;
