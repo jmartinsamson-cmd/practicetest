@@ -542,6 +542,16 @@ document.getElementById('startBtn').addEventListener('click', start);
 document.getElementById('submitBtn').addEventListener('click', submit);
 document.getElementById('nextBtn').addEventListener('click', next);
 document.getElementById('mode').addEventListener('change',(e)=>{ mode=e.target.value; if(mode==='review'){ buildReviewSheet(); } render(); });
+document.getElementById('startBtn').addEventListener('click', start);
+document.getElementById('shuffleBtn').addEventListener('click', shuffleAll);
+document.getElementById('prevBtn').addEventListener('click', prev);
+document.getElementById('submitBtn').addEventListener('click', submit);
+document.getElementById('nextBtn').addEventListener('click', next);
+document.getElementById('mode').addEventListener('change',(e)=>{
+  mode = e.target.value;
+  if(mode==='review'){ buildReviewSheet(); }
+  render();
+});
 
 buildTabs();
 // Preload with everything selected but wait for Start
