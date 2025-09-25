@@ -233,8 +233,8 @@ const BANK = {
     {cat:'Immunity', stem:'Example of a primary immunodeficiency:', choices:['HIV infection','X-linked agammaglobulinemia','Steroid therapy','Chemotherapy-related neutropenia'], answer:1, why:'Primary = congenital/inherited defects. Secondary = acquired.'},
     {cat:'Immunity', stem:'At what CD4 count do opportunistic infections like Pneumocystis pneumonia usually appear in HIV?', choices:['>800','200–500','<200','<50'], answer:2, why:'PCP risk rises at <200 CD4 cells/µL.'},
     {cat:'Immunity', stem:'Type II hypersensitivity—general treatment principle:', choices:['Epinephrine only','Remove/avoid offending antigen, immunosuppression (e.g., steroids), and in severe cases plasmapheresis/IVIG','Antibiotics only','Allergen immunotherapy'], answer:1, why:'Antibody-mediated diseases often respond to immunosuppression and, when needed, antibody removal.'},
-    {cat:'Immunity', stem:'Type III immune-complex disease—treatment often includes:', choices:['High-dose antihistamines alone','NSAIDs ± glucocorticoids and treat inciting antigen (e.g., stop drug, treat infection)','Anticoagulation only','Desensitization shots'], answer:1, why:'Reduce inflammation and remove the trigger.'}
-     {cat:'Immunity', stem:'Hypersensitivity is best defined as:', choices:[
+    {cat:'Immunity', stem:'Type III immune-complex disease—treatment often includes:', choices:['High-dose antihistamines alone','NSAIDs ± glucocorticoids and treat inciting antigen (e.g., stop drug, treat infection)','Anticoagulation only','Desensitization shots'], answer:1, why:'Reduce inflammation and remove the trigger.'},
+    {cat:'Immunity', stem:'Hypersensitivity is best defined as:', choices:[
     'Disturbance in immunologic tolerance of self-antigens',
     'Immunologic reaction of one person to the tissue of another person',
     'Altered immunologic response to an antigen that results in disease',
@@ -244,7 +244,7 @@ const BANK = {
   {cat:'Immunity', stem:'A hypersensitivity reaction that produces an allergic response is called:', choices:[
     'Hemolytic shock','Anaphylaxis','Necrotizing vasculitis','Systemic erythematosus'
   ], answer:1, why:'Systemic, severe type I reactions manifest as anaphylaxis (e.g., stings, peanuts, fish).'},
-  
+
   {cat:'Immunity', stem:'The common hay-fever allergy is mediated primarily by:', choices:[
     'IgE','IgG','IgM','T cells'
   ], answer:0, why:'Type I allergy is IgE-mediated with mast cell involvement.'},
@@ -256,7 +256,7 @@ const BANK = {
   {cat:'Immunity', stem:'Blood transfusion reactions are an example of:', choices:[
     'Autoimmunity','Alloimmunity','Homoimmunity','Hypersensitivity'
   ], answer:1, why:'Alloimmunity = immune response to antigens of another individual of the same species (e.g., ABO).'},
-  
+
   {cat:'Immunity', stem:'During an IgE-mediated hypersensitivity reaction, which leukocyte is characteristically activated?', choices:[
     'Neutrophils','Monocytes','Eosinophils','T lymphocytes'
   ], answer:2, why:'Eosinophils are recruited and activated in IgE-mediated allergy.'},
@@ -273,7 +273,7 @@ const BANK = {
     'More histamine receptors',
     'Greater quantities of IgE (and more Fcε receptors on mast cells)',
     'A deficiency in epinephrine'
-  ], answer:2, why:'Atopy is associated with higher IgE production and increased FcεRI on mast cells.'},
+  ], answer:2, why:'Atopy is associated with higher IgE and increased FcεRI on mast cells.'},
 
   {cat:'Immunity', stem:'Primary mechanism in type II hypersensitivity:', choices:[
     'Antibodies coat mast cells to trigger degranulation',
@@ -290,7 +290,7 @@ const BANK = {
     'Complement-mediated lysis','Phagocytosis by macrophages (blood)',
     'Phagocytosis in the spleen','Neutrophil granules'
   ], answer:2, why:'Low-density coating → Fc-mediated clearance in the spleen (extravascular hemolysis).'},
-  
+
   {cat:'Immunity', stem:'In type III hypersensitivity, tissue damage from immune complexes is largely due to:', choices:[
     'Cytotoxic T cells','NK cells','Complement activation with neutrophil recruitment','Mast-cell degranulation'
   ], answer:2, why:'Complement (C3a/C5a) recruits/activates neutrophils; their enzymes/ROS injure tissue.'},
@@ -299,7 +299,7 @@ const BANK = {
     'Complement-mediated cytolysis','Antibody-dependent cellular cytotoxicity',
     'Receptor modulation (stimulatory/blocking)','Neutrophil-mediated damage'
   ], answer:2, why:'TSH-receptor–stimulating antibodies cause hyperthyroidism (receptor modulation).'},
-  
+
   {cat:'Immunity', stem:'Type III hypersensitivity results from:', choices:[
     'Mast cell coating by antibody and degranulation',
     'Antibodies binding soluble antigens with deposition of immune complexes in tissues',
@@ -350,11 +350,10 @@ const BANK = {
 
   {cat:'Immunity', stem:'Recurrent infections with viruses, fungi, or yeasts most strongly suggest deficiency of:', choices:[
     'NK cells','B cells','Macrophages','T cells'
-  ], answer:3, why:'Cell-mediated (T-cell) defects predispose to these pathogens (e.g., Pneumocystis, Candida).'},
-  
+  ], answer:3, why:'Cell-mediated (T-cell) defects predispose to these pathogens.'},
+
   {cat:'Immunity', stem:'Primary immunodeficiency with partial/complete absence of T-cell immunity:', choices:[
-    'Bruton (X-linked agammaglobulinemia)','DiGeorge syndrome',
-    'Reticular dysgenesis','Adenosine deaminase deficiency'
+    'Bruton (X-linked agammaglobulinemia)','DiGeorge syndrome','Reticular dysgenesis','Adenosine deaminase deficiency'
   ], answer:1, why:'DiGeorge: thymic hypoplasia → T-cell deficiency.'},
 
   {cat:'Immunity', stem:'By what age are infants typically protected by antibodies produced by their own B cells?', choices:[
@@ -384,10 +383,7 @@ const BANK = {
   ], answer:2, why:'Type IV delayed reaction with Th1 cells and macrophage recruitment.'},
 
   {cat:'Immunity', stem:'Which exposure is a classic trigger of type IV (delayed) hypersensitivity?', choices:[
-    'Penicillin anaphylaxis',
-    'Poison ivy resin (urushiol)',
-    'Allergic rhinitis to ragweed',
-    'Immediate latex anaphylaxis'
+    'Penicillin anaphylaxis','Poison ivy resin (urushiol)','Allergic rhinitis to ragweed','Immediate latex anaphylaxis'
   ], answer:1, why:'Contact dermatitis to plant resins/metals/topical antibiotics is type IV.'},
 
   {cat:'Immunity', stem:'Which disorder is an autoimmune disease?', choices:[
@@ -397,7 +393,8 @@ const BANK = {
   {cat:'Immunity', stem:'Natural killer (NK) cells destroy antibody-coated targets in which mechanism?', choices:[
     'Complement-mediated lysis','Phagocytosis','ADCC (antibody-dependent cellular cytotoxicity)','Neutralization'
   ], answer:2, why:'Fc receptor on NK binds IgG on target → cytotoxic granule release (a type II submechanism).'},
-  ],
+],
+ 
   'Hematology': [
     {cat:'Hematology', stem:'Microcytic anemia is most commonly caused by:', choices:['Vitamin B12 deficiency','Iron deficiency','Alcohol use disorder','Hypothyroidism'], answer:1, why:'Iron deficiency is the most prevalent cause of microcytosis.'},
     {cat:'Hematology', stem:'Iron deficiency studies show:', choices:['Low ferritin, low iron, high TIBC, low TSAT','High ferritin, low iron, low TIBC','Normal ferritin, high iron, high TIBC','High ferritin, high iron, low TIBC'], answer:0, why:'Ferritin drops first; TIBC rises.'},
